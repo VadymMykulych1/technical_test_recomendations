@@ -1,24 +1,36 @@
 'use client';
 
 import { useState } from 'react';
+import { getUserRecommendations } from '@/services/interestService';
 
-export default function Home () {
+const GetInterestsPage = () => {
   const [userId, setUserId] = useState<string>('');
-  const [interests, setInterests] = useState<string[]>([]);
+  const [recommendations, setRecommendations] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value);
   };
 
-  const handleFetchInterests = () => {
-    // Fetch interests based on userId
-    // Mock data for now; replace with an actual API call
-    setInterests(['interest 1', 'interest 2', 'interest 3']);
+  const handleFetchRecommendations = async () => {
+    if (!userId) {
+      setError('User ID is required to fetch recommendations.');
+      return;
+    }
+
+    try {
+      const data = await getUserRecommendations(userId);
+      setRecommendations(data);
+      setError(null);
+    } catch (error) {
+      console.error('Failed to fetch recommendations:', error);
+      setError('Failed to fetch recommendations. Please try again.');
+    }
   };
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Get Interests</h1>
+      <h1 className="text-2xl font-bold mb-4">Get User-Specific Recommendations</h1>
       <div className="space-y-4">
         <div>
           <label className="block text-gray-700">User ID:</label>
@@ -31,18 +43,19 @@ export default function Home () {
           />
         </div>
         <button
-          onClick={handleFetchInterests}
+          onClick={handleFetchRecommendations}
           className="w-full bg-blue-500 text-white py-2 rounded mt-4"
         >
-          Get Interests
+          Get Recommendations
         </button>
-        {interests.length > 0 && (
+        {error && <p className="text-red-500 mt-2">{error}</p>}
+        {recommendations.length > 0 && (
           <div className="mt-4">
-            <h2 className="text-lg font-semibold">Interests:</h2>
+            <h2 className="text-lg font-semibold">Recommendations:</h2>
             <ul className="space-y-2">
-              {interests.map((interest, index) => (
+              {recommendations.map((rec, index) => (
                 <li key={index} className="p-2 border rounded">
-                  {interest}
+                  {rec}
                 </li>
               ))}
             </ul>
@@ -52,3 +65,5 @@ export default function Home () {
     </div>
   );
 };
+
+export default GetInterestsPage;

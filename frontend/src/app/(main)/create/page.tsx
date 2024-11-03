@@ -20,7 +20,6 @@ const CreateInterests = () => {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    // Logic for submitting the interests (e.g., API call)
     console.log(data);
     reset();
   };
