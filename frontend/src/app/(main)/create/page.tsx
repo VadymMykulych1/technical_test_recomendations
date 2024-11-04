@@ -1,6 +1,8 @@
 'use client';
 
+import { createRecommendation } from '@/services/interestService';
 import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 interface FormValues {
   userId: string;
@@ -19,9 +21,21 @@ const CreateInterests = () => {
     name: 'interests'
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
-    reset();
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      const transformedData = {
+        user_id: data.userId,
+        preferences: data.interests.map((interest) => interest.value),
+      };
+
+      const response = await createRecommendation(transformedData);
+      console.log('Recommendation created:', response);
+      toast.success('Recommendation created successfully.');
+      reset();
+    } catch (error) {
+      console.error('Failed to create recommendation:', error);
+      toast.error('Failed to create recommendation. Please try again.');
+    }
   };
 
   return (
