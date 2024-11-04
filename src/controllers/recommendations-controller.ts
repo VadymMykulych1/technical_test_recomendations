@@ -1,10 +1,10 @@
 // src/controllers/recommendationsController.ts
 
-import { Request, Response } from 'express';
-// import axios from 'axios';
-// import { OfferModel } from '../models/Offer';
+import { Request, Response } from "express";
+import axios from "axios";
+import { RecommendationModel } from "../models/recommendation";
 
-export const generateOffers = async (req: Request, res: Response) => {
+export const generateRecommendations = async (req: Request, res: Response) => {
   /**
    * TODO: Implement this controller function.
    *
@@ -30,25 +30,30 @@ export const generateOffers = async (req: Request, res: Response) => {
 
   // Example (from a different context):
 
-  /*
-  const { clientId, productInterests } = req.body;
+  const { user_id, preferences } = req.body;
 
   try {
     // Call the external promotions service
-    const apiResponse = await axios.post('http://external-api.com/promotions', { productInterests });
-    const { promotions } = apiResponse.data;
+    const apiResponse = await axios.post("http://wiremock:8080/llm/generate", {
+      preferences,
+    });
+    const { recommendations } = apiResponse.data;
 
     // Save to the database
-    const newPromotion = new PromotionModel({ clientId, promotions });
-    await newPromotion.save();
+    const newRecomendation = await RecommendationModel.create({
+      user_id,
+      recommendations,
+      preferences,
+    });
 
+    await newRecomendation.save();
     // Send the response
-    res.json({ clientId, promotions });
+    res.json({ user_id, recommendations, newRecomendation });
   } catch (error) {
-    console.error('Error generating promotions:', error);
+    console.error("Error generating promotions:", error);
     res.status(500).json({
-      error: 'Unable to generate promotions at this time. Please try again later.',
+      error:
+        "Unable to generate promotions at this time. Please try again later.",
     });
   }
-  */
 };

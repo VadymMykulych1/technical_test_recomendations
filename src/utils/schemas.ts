@@ -11,23 +11,22 @@
 
 // Example interfaces and validation chains (for candidate to use):
 
-/*
-import { body, ValidationChain } from 'express-validator';
+import { body, ValidationChain } from "express-validator";
 
-export const validatePromotionRequest: ValidationChain[] = [
-  body('clientId')
+export const validateRecommendations: ValidationChain[] = [
+  body("user_id")
     .isString()
     .trim()
     .notEmpty()
-    .withMessage('clientId is required and must be a non-empty string'),
-  body('productInterests')
+    .withMessage("user_id is required and must be a non-empty string"),
+  body("preferences")
     .isArray({ min: 1 })
-    .withMessage('productInterests must be a non-empty array'),
-  body('productInterests.*')
+    .withMessage("preferences must be a non-empty array"),
+  body("preferences.*")
     .isString()
     .trim()
     .notEmpty()
-    .withMessage('Each product interest must be a non-empty string'),
+    .withMessage("Each product preferenc must be a non-empty string"),
 ];
 
 // Define interfaces
@@ -41,4 +40,3 @@ export interface PromotionResponse {
   clientId: string;
   promotions: string[];
 }
-*/

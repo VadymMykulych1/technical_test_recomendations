@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -8,6 +8,8 @@ services:
       - .:/usr/src/app
     ports:
       - "8000:8000"
+    environment:
+      - DATABASE_URI=mongodb://db:27017/mydb
     depends_on:
       - wiremock
       - db
@@ -17,8 +19,16 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./wiremock:/home/wiremock
+      - ./wiremock/mappings:/home/wiremock/mappings
+      - ./wiremock/__files:/home/wiremock/__files
     command: --verbose
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
 
 volumes:
   mongo_data:

@@ -1,9 +1,9 @@
 // src/controllers/usersController.ts
 
-import { Request, Response } from 'express';
-// import { PromotionModel } from '../models/Promotion';
+import { Request, Response } from "express";
+import { RecommendationModel } from "../models/recommendation";
 
-export const getClientPromotions = async (req: Request, res: Response) => {
+export const getUserRecommendations = async (req: Request, res: Response) => {
   /**
    * TODO: Implement this controller function.
    *
@@ -22,27 +22,26 @@ export const getClientPromotions = async (req: Request, res: Response) => {
 
   // Example (from a different context):
 
-  /*
-  const clientId = req.params.clientId;
+  const { userRef } = req.params;
 
   try {
-    const promotion = await PromotionModel.findOne({ clientId });
+    const promotion = await RecommendationModel.find({ user_id: userRef });
 
     if (!promotion) {
       return res.status(404).json({
-        error: `No promotions found for client ${clientId}.`,
+        error: `No recommendations found for user_id ${userRef}.`,
       });
     }
 
     res.json({
-      clientId,
-      promotions: promotion.promotions,
+      user_id: userRef,
+      // recommendations: promotion.recommendations,
+      promotion,
     });
   } catch (error) {
-    console.error('Error fetching promotions:', error);
+    console.error("Error fetching promotions:", error);
     res.status(500).json({
-      error: 'Unable to fetch promotions at this time. Please try again later.',
+      error: "Unable to fetch promotions at this time. Please try again later.",
     });
   }
-  */
 };
